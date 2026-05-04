@@ -1,19 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
-import toast, { Toaster } from "react-hot-toast";
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-} from "recharts";
+import toast from "react-hot-toast";
+import ClicksBarChart from "../components/dashboard/ClicksBarChart";
+import MonthlyQuotaChart from "../components/dashboard/MonthlyQuotaChart";
 import DynamicButton from "../components/ui/DynamicButton";
+import LinkActionMenu from "../components/ui/LinkActionMenu";
+import DashboardSkeleton from "../components/skeletons/DashboardSkeleton";
 
 // --- Mock Data ---
 const clickData = [
@@ -66,6 +58,12 @@ export default function Dashboard() {
   const [customAlias, setCustomAlias] = useState("");
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [pageLoading, setPageLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setPageLoading(false), 1200);
+    return () => clearTimeout(timer);
+  }, []);
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text);
@@ -92,27 +90,31 @@ export default function Dashboard() {
     }, 1000);
   };
 
-  // Custom tooltip for the Bar Chart to match dark mode
-  const CustomTooltip = ({ active, payload, label }: any) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="bg-gray-900 border border-gray-800 p-3 rounded-lg shadow-xl">
-          <p className="text-gray-400 text-sm mb-1">{label}</p>
-          <p className="text-green-400 font-semibold">
-            {payload[0].value} clicks
-          </p>
-        </div>
-      );
-    }
-    return null;
-  };
+  if (pageLoading) {
+    return (
+      <>
+        <Helmet>
+          <title>Dashboard | STTN</title>
+        </Helmet>
+        <DashboardSkeleton />
+      </>
+    );
+  }
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500 max-w-7xl mx-auto">
+    <div className="space-y-8 animate-fade-in-up duration-500 max-w-7xl mx-auto relative z-10">
       <Helmet>
-        <title>Dashboard</title>
+        <title>Dashboard | STTN</title>
       </Helmet>
-      <Toaster position="top-right" />
+
+
+      {/* --- Ambient Overlay Background --- */}
+      <div 
+        className="absolute -top-6 -left-6 lg:-top-12 lg:-left-12 right-0 h-[400px] bg-cover bg-center bg-no-repeat opacity-[0.05] pointer-events-none mix-blend-screen z-[-1] rounded-3xl overflow-hidden"
+        style={{ backgroundImage: 'url("/login-overlay.png")' }}
+      >
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0A0B0E]"></div>
+      </div>
 
       {/* --- Header --- */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
@@ -124,13 +126,18 @@ export default function Dashboard() {
         </div>
         <div className="flex items-center gap-3">
           <div className="text-right mr-2 hidden sm:block">
-            <p className="text-xs text-gray-500 font-medium">
+            <p className="text-xs text-gray-500 font-medium mb-0.5">
               Current Workspace
             </p>
-            <p className="text-sm font-medium text-white flex items-center justify-end gap-2">
-              <span className="w-2 h-2 rounded-full bg-green-500"></span> Pro
-              Team
-            </p>
+            <div className="flex items-center justify-end gap-2">
+              <div className="relative flex items-center justify-center">
+                <span className="absolute w-3 h-3 rounded-full bg-green-500/40 animate-ping"></span>
+                <span className="relative w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></span>
+              </div>
+              <span className="text-sm font-semibold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
+                Pro Plan
+              </span>
+            </div>
           </div>
         </div>
       </div>
@@ -168,83 +175,8 @@ export default function Dashboard() {
 
       {/* --- Charts Row --- */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Left: Bar Chart (7 Days) */}
-        <div className="lg:col-span-2 bg-[#111216] border border-gray-800/60 rounded-xl p-6 shadow-sm">
-          <div className="mb-6">
-            <h3 className="text-white font-medium">Clicks over time</h3>
-            <p className="text-sm text-gray-400">Last 7 days performance</p>
-          </div>
-          <div className="h-64 w-full">
-            <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={clickData}
-                margin={{ top: 0, right: 0, left: -20, bottom: 0 }}
-              >
-                <CartesianGrid
-                  strokeDasharray="3 3"
-                  vertical={false}
-                  stroke="#374151"
-                />
-                <XAxis
-                  dataKey="name"
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fill: "#9ca3af", fontSize: 12 }}
-                  dy={10}
-                />
-                <YAxis
-                  axisLine={false}
-                  tickLine={false}
-                  tick={{ fill: "#9ca3af", fontSize: 12 }}
-                />
-                <Tooltip
-                  cursor={{ fill: "#1f2937" }}
-                  content={<CustomTooltip />}
-                />
-                {/* Different shades of green using an array of colors or a gradient. Here we use a solid premium green */}
-                <Bar dataKey="clicks" fill="#10b981" radius={[4, 4, 0, 0]} />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-
-        {/* Right: Half Circle Quota Chart */}
-        <div className="bg-[#111216] border border-gray-800/60 rounded-xl p-6 shadow-sm flex flex-col items-center relative">
-          <div className="w-full mb-2 text-left">
-            <h3 className="text-white font-medium">Monthly Quota</h3>
-            <p className="text-sm text-gray-400">Link creation limit</p>
-          </div>
-
-          <div className="h-48 w-full relative mt-4">
-            <ResponsiveContainer width="100%" height="100%">
-              <PieChart>
-                <Pie
-                  data={quotaData}
-                  cx="50%"
-                  cy="100%"
-                  startAngle={180}
-                  endAngle={0}
-                  innerRadius={70}
-                  outerRadius={90}
-                  paddingAngle={2}
-                  dataKey="value"
-                  stroke="none"
-                >
-                  {quotaData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={entry.color} />
-                  ))}
-                </Pie>
-              </PieChart>
-            </ResponsiveContainer>
-            {/* Center Text inside the donut */}
-            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 text-center w-full">
-              <p className="text-3xl font-semibold text-white">84%</p>
-              <p className="text-sm text-gray-500 font-medium">
-                840 / 1000 links
-              </p>
-            </div>
-          </div>
-        </div>
+        <ClicksBarChart data={clickData} />
+        <MonthlyQuotaChart used={840} total={1000} planName="Pro Plan" />
       </div>
 
       {/* --- Create Link Tool --- */}
@@ -293,10 +225,10 @@ export default function Dashboard() {
           </div>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm">
-            <thead>
-              <tr className="bg-gray-900/30 border-b border-gray-800/60">
+        <div className="overflow-hidden">
+          <table className="w-full text-left text-sm block sm:table">
+            <thead className="hidden sm:table-header-group">
+              <tr className="bg-gray-900/30 border-b border-gray-800/60 block sm:table-row">
                 <th className="py-3 px-6 font-medium text-gray-400 w-1/3">
                   Short Link
                 </th>
@@ -310,13 +242,13 @@ export default function Dashboard() {
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800/60">
+            <tbody className="block sm:table-row-group divide-y divide-gray-800/60">
               {mockLinks.map((link) => (
                 <tr
                   key={link.id}
-                  className="hover:bg-gray-800/20 transition-colors group"
+                  className="hover:bg-gray-800/20 transition-colors group block sm:table-row relative p-4 sm:static sm:p-0"
                 >
-                  <td className="py-4 px-6">
+                  <td className="block sm:table-cell py-1 sm:py-4 px-2 sm:px-6">
                     <div className="flex items-center gap-2">
                       <span className="font-medium text-white">
                         {link.shortUrl}
@@ -329,37 +261,30 @@ export default function Dashboard() {
                         <i className="ri-file-copy-line"></i>
                       </button>
                     </div>
-                    <div className="flex gap-1.5 mt-1.5">
-                      {link.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="text-xs text-gray-500 bg-gray-900 border border-gray-800 px-1.5 py-0.5 rounded-md"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
                   </td>
-                  <td className="py-4 px-6">
+                  <td className="block sm:table-cell py-1 sm:py-4 px-2 sm:px-6">
                     <p
-                      className="text-gray-400 truncate max-w-[250px]"
+                      className="text-gray-400 truncate max-w-[280px]"
                       title={link.originalUrl}
                     >
                       {link.originalUrl}
                     </p>
-                    <p className="text-xs text-gray-500 mt-1">{link.date}</p>
+                    <p className="text-xs text-gray-500 mt-1 flex items-center gap-1"><i className="ri-calendar-line sm:hidden"></i> {link.date}</p>
                   </td>
-                  <td className="py-4 px-6">
-                    <span className="text-white font-medium">
-                      {link.clicks.toLocaleString()}
-                    </span>
-                  </td>
-                  <td className="py-4 px-6">
+                  {/* Mobile Only: Clicks and Status */}
+                  <td className="flex items-center justify-between sm:hidden py-3 px-2 mt-1">
+                    <div className="flex items-center gap-2">
+                      <i className="ri-bar-chart-2-line text-gray-500"></i>
+                      <span className="text-white font-medium">
+                        {link.clicks.toLocaleString()}
+                      </span>
+                      <span className="text-gray-500 text-[11px] font-medium uppercase tracking-wider ml-1">Clicks</span>
+                    </div>
                     <span
-                      className={`inline-flex items-center gap-1.5 px-2 py-1 rounded-md text-xs font-medium ${
+                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium ${
                         link.status === "Active"
-                          ? "bg-green-500/10 text-green-400"
-                          : "bg-gray-800 text-gray-400"
+                          ? "bg-green-500/10 text-green-400 border border-green-500/20"
+                          : "bg-gray-800/50 text-gray-400 border border-gray-700/50"
                       }`}
                     >
                       <div
@@ -368,27 +293,31 @@ export default function Dashboard() {
                       {link.status}
                     </span>
                   </td>
-                  <td className="py-4 px-6 text-right">
-                    <div className="flex items-center justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                      <button
-                        className="p-1.5 text-gray-400 hover:text-white transition-colors"
-                        title="QR Code"
-                      >
-                        <i className="ri-qr-code-line"></i>
-                      </button>
-                      <button
-                        className="p-1.5 text-gray-400 hover:text-white transition-colors"
-                        title="Edit"
-                      >
-                        <i className="ri-edit-line"></i>
-                      </button>
-                      <button
-                        className="p-1.5 text-gray-400 hover:text-red-400 transition-colors"
-                        title="Delete"
-                      >
-                        <i className="ri-delete-bin-line"></i>
-                      </button>
-                    </div>
+
+                  {/* Desktop Only: Clicks */}
+                  <td className="hidden sm:table-cell py-4 px-6">
+                    <span className="text-white font-medium">
+                      {link.clicks.toLocaleString()}
+                    </span>
+                  </td>
+
+                  {/* Desktop Only: Status */}
+                  <td className="hidden sm:table-cell py-4 px-6">
+                    <span
+                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium ${
+                        link.status === "Active"
+                          ? "bg-green-500/10 text-green-400 border border-green-500/20"
+                          : "bg-gray-800/50 text-gray-400 border border-gray-700/50"
+                      }`}
+                    >
+                      <div
+                        className={`w-1.5 h-1.5 rounded-full ${link.status === "Active" ? "bg-green-400" : "bg-gray-500"}`}
+                      />
+                      {link.status}
+                    </span>
+                  </td>
+                  <td className="block sm:table-cell py-3 sm:py-4 px-2 sm:px-6 text-right mt-3 sm:mt-0 border-t border-gray-800/60 sm:border-none">
+                    <LinkActionMenu />
                   </td>
                 </tr>
               ))}

@@ -1,44 +1,32 @@
-import { useState } from "react";
+import React from "react";
 import { Helmet } from "react-helmet-async";
+import LandingNavbar from "../components/landing/LandingNavbar";
+import HeroSection from "../components/landing/HeroSection";
+import FeaturesSection from "../components/landing/FeaturesSection";
+import PricingSection from "../components/landing/PricingSection";
+import FooterSection from "../components/landing/FooterSection";
 
 export default function Landing() {
-  const [url, setUrl] = useState("");
-  const [shortUrl, setShortUrl] = useState("");
-
-  const handleShorten = () => {
-    if (!url) return;
-
-    // TEMP mock (replace with API later)
-    const fakeShort = "short.ly/" + Math.random().toString(36).substring(6);
-    setShortUrl(fakeShort);
-  };
-
   return (
-    <div style={{ padding: "40px", textAlign: "center" }}>
+    <div className="min-h-screen bg-[#050505] bg-grid-pattern text-white selection:bg-emerald-500/30 font-sans scroll-smooth">
       <Helmet>
-        <title>Turain | Home</title>
+        <title>STTN | Enterprise URL Shortener & Link Management</title>
+        <meta name="description" content="Turain is the ultimate platform for modern businesses to shorten links, track analytics, and optimize their digital presence. Fast, secure, and powerful." />
+        <meta name="keywords" content="url shortener, link management, custom domains, link analytics, qr codes" />
+        <meta property="og:title" content="Turain | Expand Your Reach" />
+        <meta property="og:description" content="Shorten URLs, track clicks, and manage your brand links securely." />
+        <meta property="og:type" content="website" />
       </Helmet>
-      <h1>URL Shortener 🚀</h1>
 
-      <div style={{ marginTop: "20px" }}>
-        <input
-          type="text"
-          placeholder="Enter your long URL"
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-          style={{ padding: "10px", width: "300px" }}
-        />
+      <LandingNavbar />
+      
+      <main>
+        <HeroSection />
+        <FeaturesSection />
+        <PricingSection />
+      </main>
 
-        <button onClick={handleShorten} style={{ marginLeft: "10px", padding: "10px" }}>
-          Shorten
-        </button>
-      </div>
-
-      {shortUrl && (
-        <p style={{ marginTop: "20px" }}>
-          Short URL: <strong>{shortUrl}</strong>
-        </p>
-      )}
+      <FooterSection />
     </div>
   );
 }

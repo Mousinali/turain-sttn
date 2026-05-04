@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 import { Helmet } from "react-helmet-async";
 
 import DynamicButton from "../components/ui/DynamicButton";
@@ -121,7 +121,6 @@ export default function Login() {
       <Helmet>
         <title>Secure Login</title>
       </Helmet>
-      <Toaster position="top-center" reverseOrder={false} />
       <div className="min-h-screen bg-[#0A0B0E] text-white selection:bg-green-500/30 flex overflow-hidden">
         {/* LEFT SIDE - Form */}
         <div className="w-full lg:w-[45%] flex flex-col justify-center px-6 sm:px-12 md:px-20 xl:px-28 relative z-10">
@@ -283,7 +282,7 @@ export default function Login() {
         <div className="hidden lg:flex w-[55%] bg-[#07080A] items-center justify-center overflow-hidden border-l border-white/[0.03] relative">
           <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-green-500/20 rounded-full mix-blend-screen filter blur-[120px] animate-pulse"></div>
           <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-emerald-900/50 rounded-full mix-blend-screen filter blur-[150px]"></div>
-          <div className="absolute bottom-0 w-full -right-72">
+          <div className="absolute -bottom-36 w-full -right-72">
             <div className="relative z-10 bg-[#111216]/80 backdrop-blur-xl border border-white/[0.05] rounded-3xl shadow-2xl flex flex-col overflow-hidden">
               <div className="h-14 border-b border-white/[0.05] flex items-center px-6 relative">
                 <div className="absolute bottom-0 left-0 w-full h-[1px] bg-white/[0.05]">
@@ -295,9 +294,9 @@ export default function Login() {
               </div>
               <div className="relative">
                 <img
-                  src="/login-overlay.png"
+                  src="/dashboard-main.png"
                   alt="login-overlay"
-                  className="w-full h-auto opacity-80"
+                  className="w-full h-auto opacity-75"
                 />
                 <div className="absolute inset-x-0 bottom-0 h-52 bg-gradient-to-t from-[#111216] via-[#111216]/65 to-transparent pointer-events-none" />
               </div>
