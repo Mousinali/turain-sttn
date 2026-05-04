@@ -19,8 +19,8 @@ export default function DynamicButton({
     <div className={`relative`}>
       <button
         disabled={isDisabled}
-        className={`group relative flex h-[56px] ${className} w-full items-center justify-center overflow-hidden rounded-2xl border-none outline-none transition-all duration-300 active:scale-95 shadow-[0_0_20px_rgba(16,185,129,0.3)] ${
-          isDisabled ? "opacity-50 cursor-not-allowed active:scale-100" : ""
+        className={`group relative flex h-[56px] ${className} w-full cursor-pointer items-center justify-center overflow-hidden rounded-2xl border-none outline-none transition-all duration-300 active:scale-95 shadow-[0_0_20px_rgba(16,185,129,0.3)] ${
+          isDisabled ? "opacity-50 cursor-not-allowed active:scale-100 " : ""
         }`}
         style={{
           background: `radial-gradient(65.28% 65.28% at 50% 100%, rgba(52, 211, 153, 0.8) 0%, rgba(52, 211, 153, 0) 100%), #059669`

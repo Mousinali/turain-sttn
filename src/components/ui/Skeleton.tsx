@@ -1,9 +1,5 @@
 import React from "react";
 
-/**
- * Base skeleton block with shimmer animation.
- * Uses a moving gradient overlay for the shimmer effect.
- */
 export function Skeleton({
   className = "",
   style,

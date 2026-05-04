@@ -1,5 +1,6 @@
 import React from "react";
 import { Helmet } from "react-helmet-async";
+import DynamicButton from "../components/ui/DynamicButton";
 
 export default function Contact() {
   return (
@@ -34,9 +35,11 @@ export default function Contact() {
               <label className="block text-sm font-medium text-gray-400 mb-2">Message</label>
               <textarea rows={4} className="w-full bg-[#050505] border border-gray-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#53D35F]" placeholder="How can we help you?"></textarea>
             </div>
-            <button type="button" className="w-full py-4 rounded-full bg-[#53D35F] text-black font-bold hover:bg-[#41BF4D] transition-colors shadow-[0_0_20px_rgba(83,211,95,0.2)]">
-              Send Message
-            </button>
+            <DynamicButton
+              label="Send Message"
+              type="button"
+              className="w-full rounded-2xl"
+            />
           </form>
         </div>
       </div>

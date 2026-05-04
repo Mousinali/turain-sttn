@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import toast from "react-hot-toast";
+import DynamicButton from "../components/ui/DynamicButton";
 import SettingsSkeleton from "../components/skeletons/SettingsSkeleton";
 
 type TabType = "Profile" | "API" | "Billing";
@@ -153,9 +154,11 @@ export default function Settings() {
                 </div>
 
                 <div className="pt-4 flex justify-end">
-                  <button type="submit" className="px-5 py-2.5 bg-green-500 hover:bg-green-600 text-white rounded-lg text-sm font-medium transition-colors">
-                    Save Changes
-                  </button>
+                  <DynamicButton
+                    label="Save Changes"
+                    type="submit"
+                    className="w-full sm:w-48 h-11! rounded-lg"
+                  />
                 </div>
               </form>
             </div>
@@ -201,9 +204,10 @@ export default function Settings() {
                 </div>
 
                 <div className="mt-6 pt-6 border-t border-gray-800/60 flex justify-end">
-                  <button className="px-4 py-2 bg-white text-black hover:bg-gray-200 rounded-lg text-sm font-medium transition-colors flex items-center gap-2">
-                    <i className="ri-add-line text-lg"></i> Create new secret key
-                  </button>
+                  <DynamicButton
+                    label="Create new secret key"
+                    className="w-full sm:w-56 h-11! rounded-lg"
+                  />
                 </div>
               </div>
 
@@ -232,9 +236,10 @@ export default function Settings() {
                       $49.00 / month. Next billing date is Jun 1, 2026.
                     </p>
                   </div>
-                  <button className="px-4 py-2 bg-white text-black hover:bg-gray-200 rounded-lg text-sm font-medium transition-colors">
-                    Manage Billing
-                  </button>
+                  <DynamicButton
+                    label="Manage Billing"
+                    className="w-full sm:w-48 h-11! rounded-lg"
+                  />
                 </div>
 
                 <div className="pt-6 border-t border-gray-800/60">

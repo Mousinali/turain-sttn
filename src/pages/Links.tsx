@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Helmet } from "react-helmet-async";
 import toast from "react-hot-toast";
+import DynamicButton from "../components/ui/DynamicButton";
 import LinkActionMenu from "../components/ui/LinkActionMenu";
 import LinksSkeleton from "../components/skeletons/LinksSkeleton";
 
@@ -69,7 +70,9 @@ export default function Links() {
             Manage, organize, and track all your shortened URLs.
           </p>
         </div>
-        <button
+        <DynamicButton
+          label="Create New Link"
+          className="w-full sm:w-48 h-11! rounded-lg"
           onClick={() =>
             toast.success("Navigate to Dashboard to create a link", {
               style: {
@@ -79,10 +82,7 @@ export default function Links() {
               },
             })
           }
-          className="flex items-center gap-2 bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg font-medium transition-colors text-sm"
-        >
-          <i className="ri-add-line"></i> Create New Link
-        </button>
+        />
       </div>
 
       {/* --- Toolbar --- */}

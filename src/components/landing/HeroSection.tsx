@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import DynamicButton from "../ui/DynamicButton";
 
 // Advance UX refined SaaS Hero section with specific viewport sizing and spacing hierarchy.
 export default function HeroSection() {
@@ -50,22 +51,22 @@ export default function HeroSection() {
                 onChange={(e) => setUrl(e.target.value)}
               />
             </div>
-            <button
-              type="submit"
-              className="hidden sm:flex items-center gap-2 px-10 py-4.5 bg-emerald-500 hover:bg-emerald-600 text-black font-bold text-lg rounded-full transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)] active:scale-[0.98]"
-            >
-              Shorten Now
-              <i className="ri-arrow-right-up-line text-xl"></i>
-            </button>
+            <div className="hidden sm:block">
+              <DynamicButton
+                type="submit"
+                label="Shorten Now"
+                className="w-48! h-14! rounded-full text-lg!"
+              />
+            </div>
           </form>
           {/* Mobile Button - Refined styling */}
-          <button
-            onClick={handleShorten}
-            className="sm:hidden w-full mt-6 flex items-center justify-center gap-3 px-10 py-5 bg-emerald-500 hover:bg-emerald-600 text-black font-bold text-lg rounded-full transition-all shadow-[0_0_20px_rgba(16,185,129,0.2)] active:scale-[0.98]"
-          >
-            Shorten Now
-            <i className="ri-arrow-right-up-line text-xl"></i>
-          </button>
+          <div className="sm:hidden mt-6">
+            <DynamicButton
+              label="Shorten Now"
+              onClick={handleShorten}
+              className="w-full h-14! rounded-full text-lg!"
+            />
+          </div>
         </div>
 
         {/* Refined Dashboard Mockup Section - Crucially, expanded sizing for expansive feel */}
@@ -84,7 +85,7 @@ export default function HeroSection() {
           <img 
             src="/landing.png" // Confirmed file from image_1.png asset
             alt="Your Refined Turain Dashboard"
-            className="w-full h-auto object-covertransition-transform duration-500"
+            className="w-full h-auto opacity-90 object-covertransition-transform duration-500"
           />
         </div>
       </div>
