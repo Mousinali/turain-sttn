@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import DynamicButton from "../ui/DynamicButton";
 
 // Advance UX refined SaaS Hero section with specific viewport sizing and spacing hierarchy.
@@ -32,7 +31,7 @@ export default function HeroSection() {
 
         {/* Refined Subheadline - Increased max width, slightly larger size, better spacing */}
         <div className="max-w-2xl mx-auto mb-12">
-          <p className="text-lg text-gray-400 font-medium leading-relaxed">
+          <p className="text-lg text-gray-400 leading-relaxed">
             The ultimate platform for modern businesses to shorten links, track analytics, and optimize their digital presence. Fast, secure, and incredibly powerful.
           </p>
         </div>
@@ -64,13 +63,13 @@ export default function HeroSection() {
             <DynamicButton
               label="Shorten Now"
               onClick={handleShorten}
-              className="w-full h-14! rounded-full text-lg!"
+              className="w-full h-13! rounded-full text-lg!"
             />
           </div>
         </div>
 
         {/* Refined Dashboard Mockup Section - Crucially, expanded sizing for expansive feel */}
-        <div className="mt-12 md:mt-20 relative max-w-[1200px] mx-auto  rounded-t-[24px] bg-[#0A0B0E] border border-gray-800/80 shadow-[0_40px_100px_-20px_rgba(16,185,129,0.25)] ring-1 ring-white/10 group overflow-hidden">
+        <div className="mt-12 md:mt-20 relative max-w-[1200px] mx-auto  rounded-t-[24px] bg-[#0A0B0E] border border-b-0 border-gray-800/80 shadow-[0_40px_100px_-20px_rgba(16,185,129,0.25)] ring-1 ring-white/10 group overflow-hidden">
           
           {/* browser window controls for added mockup feeling */}
           {/* <div className="absolute top-7 left-6 flex gap-2">
