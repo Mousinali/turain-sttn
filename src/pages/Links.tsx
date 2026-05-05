@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import toast from "react-hot-toast";
 import DynamicButton from "../components/ui/DynamicButton";
 import LinkActionMenu from "../components/ui/LinkActionMenu";
+import CreateLinkModal from "../components/ui/CreateLinkModal";
 import LinksSkeleton from "../components/skeletons/LinksSkeleton";
 
 // --- Mock Data ---
@@ -19,6 +20,7 @@ const mockLinks = Array.from({ length: 12 }).map((_, i) => ({
 export default function Links() {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("All");
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
 
   useEffect(() => {
@@ -62,6 +64,9 @@ export default function Links() {
         <title>Links</title>
       </Helmet>
 
+      {/* --- Create Link Modal --- */}
+      <CreateLinkModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
+
       {/* --- Header --- */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -73,15 +78,7 @@ export default function Links() {
         <DynamicButton
           label="Create New Link"
           className="w-full sm:w-48 h-11! rounded-lg"
-          onClick={() =>
-            toast.success("Navigate to Dashboard to create a link", {
-              style: {
-                background: "#1f2937",
-                color: "#fff",
-                border: "1px solid #374151",
-              },
-            })
-          }
+          onClick={() => setIsModalOpen(true)}
         />
       </div>
 

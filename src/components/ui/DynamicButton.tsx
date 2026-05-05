@@ -46,8 +46,7 @@ export default function DynamicButton({
         )}
 
         {/* Glossy Overlay Effects */}
-        <div className="absolute inset-[1px] z-0 rounded-[calc(1rem-1px)] bg-gradient-to-b from-white/20 to-transparent transition-opacity duration-500 group-hover:opacity-40" />
-
+       
         {/* Button Label & Icon */}
         <span className="relative z-20 flex items-center justify-center gap-[8px] text-base font-bold leading-normal text-white transition-colors duration-200">
           {isLoading ? (

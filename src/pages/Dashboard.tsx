@@ -5,6 +5,7 @@ import ClicksBarChart from "../components/dashboard/ClicksBarChart";
 import MonthlyQuotaChart from "../components/dashboard/MonthlyQuotaChart";
 import DynamicButton from "../components/ui/DynamicButton";
 import LinkActionMenu from "../components/ui/LinkActionMenu";
+import CreateLinkModal from "../components/ui/CreateLinkModal";
 import DashboardSkeleton from "../components/skeletons/DashboardSkeleton";
 
 // --- Mock Data ---
@@ -54,10 +55,7 @@ const mockLinks = [
 ];
 
 export default function Dashboard() {
-  const [url, setUrl] = useState("");
-  const [customAlias, setCustomAlias] = useState("");
-  const [showAdvanced, setShowAdvanced] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
 
   useEffect(() => {
@@ -77,19 +75,6 @@ export default function Dashboard() {
     });
   };
 
-  const handleShorten = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    toast.loading("Generating link...", { id: "create-link" });
-
-    setTimeout(() => {
-      toast.success("Link created successfully", { id: "create-link" });
-      setUrl("");
-      setCustomAlias("");
-      setIsLoading(false);
-    }, 1000);
-  };
-
   if (pageLoading) {
     return (
       <>
@@ -107,6 +92,8 @@ export default function Dashboard() {
         <title>Dashboard | STTN</title>
       </Helmet>
 
+      {/* --- Create Link Modal --- */}
+      <CreateLinkModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} />
 
       {/* --- Ambient Overlay Background --- */}
       <div 
@@ -124,22 +111,11 @@ export default function Dashboard() {
             Manage your links and view performance analytics.
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <div className="text-right mr-2 hidden sm:block">
-            <p className="text-xs text-gray-500 font-medium mb-0.5">
-              Current Workspace
-            </p>
-            <div className="flex items-center justify-end gap-2">
-              <div className="relative flex items-center justify-center">
-                <span className="absolute w-3 h-3 rounded-full bg-green-500/40 animate-ping"></span>
-                <span className="relative w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></span>
-              </div>
-              <span className="text-sm font-semibold bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
-                Pro Plan
-              </span>
-            </div>
-          </div>
-        </div>
+        <DynamicButton
+          label="Create New Link"
+          className="w-full sm:w-48 h-11! rounded-lg"
+          onClick={() => setIsModalOpen(true)}
+        />
       </div>
 
       {/* --- Top Stats Row --- */}
@@ -177,41 +153,6 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <ClicksBarChart data={clickData} />
         <MonthlyQuotaChart used={840} total={1000} planName="Pro Plan" />
-      </div>
-
-      {/* --- Create Link Tool --- */}
-      <div className="bg-[#111216] border border-gray-800/60 rounded-xl p-6 shadow-sm">
-        <h2 className="text-lg font-medium text-white mb-1">
-          Create short link
-        </h2>
-        <p className="text-sm text-gray-400 mb-5">
-          Paste a long URL to generate a trackable short link.
-        </p>
-
-        <form onSubmit={handleShorten} className="space-y-4 max-w-4xl">
-          <div className="flex flex-col sm:flex-row gap-3">
-            <div className="flex-1 relative">
-              <div className="absolute top-1/2 -translate-y-1/2 left-3 flex items-center text-gray-400">
-                <i className="ri-link"></i>
-              </div>
-              <input
-                type="url"
-                placeholder="https://example.com/very-long-url-path"
-                value={url}
-                onChange={(e) => setUrl(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-[#0a0b0e] border border-gray-800 rounded-lg text-white text-sm outline-none focus:border-green-500 focus:ring-0.5 focus:ring-green-500 transition-all placeholder:text-gray-500!"
-                required
-              />
-            </div>
-
-            <DynamicButton
-              label="Shorten"
-              className="w-full sm:w-32 h-11! rounded-lg"
-              type="submit"
-              isLoading={isLoading}
-            />
-          </div>
-        </form>
       </div>
 
       {/* --- Data Table --- */}
